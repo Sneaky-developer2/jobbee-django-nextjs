@@ -18,7 +18,6 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -41,8 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'corsheaders',
+    'storages',
     'django.contrib.gis',
-    'job',
+    'django_filters',
+
+    'job.apps.JobConfig',
 ]
 
 MIDDLEWARE = [
@@ -83,9 +87,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': "jobbee-api",
-        'USER':'postgres',
-        'PASSWORD':'1',
-        'HOST':'localhost',
+        'USER': 'postgres',
+        'PASSWORD': '1',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
@@ -142,6 +146,3 @@ os.environ['PROJ_LIB'] = os.path.join(
     BASE_DIR, 'myenv\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
 GDAL_LIBRARY_PATH = os.path.join(
     BASE_DIR, 'myenv\Lib\site-packages\osgeo\gdal304.dll')
-
-
-
