@@ -12,6 +12,7 @@ from .models import CondidatesApplied, Job
 from .filters import JobsFilter
 
 
+
 @api_view(['GET'])
 def getAllJobs(request):
     filterset = JobsFilter(
@@ -155,10 +156,39 @@ def getCurrentUserAppliedJobs(request):
 @permission_classes([IsAuthenticated])
 def isApplied(request, pk):
 
-
     user = request.user
     job = get_object_or_404(Job, id=pk)
 
     applied = job.condidatesapplied_set.filter(user=user).exists()
 
     return Response(applied)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCurrentUserJobs(request):
+    args = {'user': request.user.id}
+    jobs = Job.objects.filter(**args)
+    serializer = JobSerializer(jobs, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCondidatesApplied(request, pk):
+
+    user = request.user
+    job = get_object_or_404(Job, id=pk)
+
+    if job.user != user:
+        return Response({'error': 'You can not access this job'}, status=status.HTTP_403_FORBIDDEN)
+
+    condidates = job.condidatesapplied_set.all()
+    serializer = CondidatesAppliedSerializer(condidates, many=True)
+
+    return Response(serializer.data)
+    
+
+
+
