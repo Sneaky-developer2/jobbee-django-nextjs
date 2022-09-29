@@ -7,9 +7,8 @@ export default function Index({ data }) {
   console.log('jobs', data)
   return (
     <Layout>
-      <Home data={data}/>
+      <Home data={data} />
     </Layout>
-
   )
 }
 
