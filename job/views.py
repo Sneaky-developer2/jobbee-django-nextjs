@@ -12,7 +12,6 @@ from .models import CondidatesApplied, Job
 from .filters import JobsFilter
 
 
-
 @api_view(['GET'])
 def getAllJobs(request):
     filterset = JobsFilter(
@@ -40,9 +39,11 @@ def getAllJobs(request):
 def getJob(request, pk):
     job = get_object_or_404(Job, id=pk)
 
+    condidates = job.condidatesapplied_set.all().count()
+
     serializer = JobSerializer(job, many=False)
 
-    return Response(serializer.data)
+    return Response({'job': serializer.data, 'candidates': condidates})
 
 
 @api_view(['POST'])
@@ -188,7 +189,3 @@ def getCondidatesApplied(request, pk):
     serializer = CondidatesAppliedSerializer(condidates, many=True)
 
     return Response(serializer.data)
-    
-
-
-
